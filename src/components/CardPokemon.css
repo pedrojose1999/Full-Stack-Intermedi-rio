@@ -1,0 +1,100 @@
+body {
+  /* Imporando fonts */
+  font-family: "Outfit", sans-serif;
+  background-image: url(../assets/img/fundo-site.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.card-pokemon {
+  height: 350px;
+  width: 250px;
+  position: relative;
+}
+
+.card {
+  background-color: antiquewhite;
+  /* Ocupar todo o tamanho da ul */
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: absolute;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  transition: opacity 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+.card .info {
+  background-color: rgba(179, 177, 185, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 12px;
+  padding: 8px 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.card .info .name {
+  color: #000000;
+  font-size: 22px;
+}
+
+.card .info .life {
+  background-color: #333;
+  color: #f1ecff;
+  border-radius: 20px;
+  padding: 6px 10px;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+.card .container-image {
+  text-align: center;
+  height: 40%;
+}
+.card .container-image img {
+  min-width: 98%;
+  margin-top: -30px;
+}
+
+.card .image-pokemon {
+  max-width: 100%;
+  max-height: 280px;
+  margin-top: -15px;
+}
+
+.card .description {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+  overflow-y: auto;
+  height: 50%;
+}
+
+.card .description .title {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: #333;
+  color: #f1ecff;
+  font-size: 15px;
+  padding: 5px;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+.card .description .text {
+  font-size: 14px;
+  padding: 5px;
+  text-align: justify;
+  overflow-y: auto;
+}

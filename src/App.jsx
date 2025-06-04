@@ -1,5 +1,10 @@
+import HomePage from "./pages/homePage/homePage";
 function App() {
-  return <div className="bg-amber-500">teste</div>;
+  return (
+    <main>
+      <HomePage />
+    </main>
+  );
 }
 
 export default App;

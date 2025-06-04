@@ -167,7 +167,7 @@ export default function HomePage() {
     <main className="flex flex-col items-center m-3 gap-5">
       <div className="flex justify-end mr-10px w-full">
         <button
-          className="rounded-2xl bg-green-400 text-white font-bold text-2xl cursor-pointer hover:bg-green-700 btnAdd"
+          className="rounded-2xl bg-green-400 text-white font-bold text-[20px] cursor-pointer hover:bg-green-700 btnAdd"
           onClick={() => setIsModalOpen(true)}
         >
           Adicionar Pokémon

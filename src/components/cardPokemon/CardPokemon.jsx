@@ -1,8 +1,8 @@
 import "./CardPokemon.css";
-import fundoFogo from "../assets/img/fundo-fogo.jpg";
-import fundoEletrico from "../assets/img/fundo-raio.jpg";
-import fundoPisiquico from "../assets/img/fundo-psiquico.jpg";
-import fundoDefault from "../assets/img/fundo-padrao.jpg";
+import fundoFogo from "../../assets/img/fundo-fogo.jpg";
+import fundoEletrico from "../../assets/img/fundo-raio.jpg";
+import fundoPisiquico from "../../assets/img/fundo-psiquico.jpg";
+import fundoDefault from "../../assets/img/fundo-padrao.jpg";
 export default function CardComponent({ name, hp, description, type, image }) {
   let backgroundUrl = "";
 

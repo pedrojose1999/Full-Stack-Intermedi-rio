@@ -1,10 +1,16 @@
+// Native Hooks
 import { useState, useEffect } from "react";
-import CardPokemon from "../../components/CardPokemon";
 
+// Components
+import CardPokemon from "../../components/cardPokemon/CardPokemon";
+import Spin from "../../components/spin/spin";
+
+// Style
 import "./homePage.css";
 
 export default function HomePage() {
   const [pokemons, setPokemons] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pokemonOptions, setPokemonOptions] = useState([]);
   const [selectedPokemonName, setSelectedPokemonName] = useState("");
@@ -18,13 +24,10 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchPokemonOptions() {
-      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=150");
+      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10");
       const data = await res.json();
 
-      // Extraindo os nomes dos pokémons adicionados
       const addedNames = pokemons.map((p) => p.name);
-
-      // Filtrando para mostrar apenas os que ainda não foram adicionados
       const filtered = data.results
         .map((p) => p.name)
         .filter((name) => !addedNames.includes(name));
@@ -33,14 +36,15 @@ export default function HomePage() {
     }
 
     if (isModalOpen) {
-      fetchPokemonOptions(); // Só busca quando abrir o modal
+      fetchPokemonOptions();
     }
   }, [isModalOpen, pokemons]);
 
   useEffect(() => {
     async function fetchPokemons() {
       try {
-        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10");
+        setIsLoading(true);
+        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
         const data = await res.json();
 
         const detailedPromises = data.results.map(async (pokemon) => {
@@ -55,6 +59,15 @@ export default function HomePage() {
           const descriptionEntry = species.flavor_text_entries.find(
             (entry) => entry.language.name === "en"
           );
+
+          if (details.sprites.front_default) {
+            await new Promise((resolve) => {
+              const img = new Image();
+              img.src = details.sprites.front_default;
+              img.onload = resolve;
+              img.onerror = resolve;
+            });
+          }
 
           return {
             name: details.name,
@@ -71,12 +84,14 @@ export default function HomePage() {
         setPokemons(fullData);
       } catch (error) {
         console.error("Erro ao buscar pokémons:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     fetchPokemons();
   }, []);
-  // Quando seleciona um nome no select
+
   async function handlePokemonSelect(e) {
     const name = e.target.value;
     setSelectedPokemonName(name);
@@ -96,6 +111,15 @@ export default function HomePage() {
         (entry) => entry.language.name === "en"
       );
 
+      if (details.sprites.front_default) {
+        await new Promise((resolve) => {
+          const img = new Image();
+          img.src = details.sprites.front_default;
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+      }
+
       setNewPokemon({
         name: details.name,
         hp: details.stats.find((s) => s.stat.name === "hp")?.base_stat || 0,
@@ -113,6 +137,7 @@ export default function HomePage() {
   function removePokemon(name) {
     setPokemons((prev) => prev.filter((p) => p.name !== name));
   }
+
   function handleSave() {
     setPokemons((prev) => [...prev, newPokemon]);
     setNewPokemon({
@@ -142,51 +167,54 @@ export default function HomePage() {
     <main className="flex flex-col items-center m-3 gap-5">
       <div className="flex justify-end mr-10px w-full">
         <button
-          className=" rounded-2xl bg-green-400 text-white font-bold text-2xl cursor-pointer  hover:bg-green-700 btnAdd"
+          className="rounded-2xl bg-green-400 text-white font-bold text-2xl cursor-pointer hover:bg-green-700 btnAdd"
           onClick={() => setIsModalOpen(true)}
         >
           Adicionar Pokémon
         </button>
       </div>
 
-      <div className="flex justify-center flex-wrap gap-5">
-        {pokemons.map((pokemon) => (
-          <div key={pokemon.name}>
-            <CardPokemon
-              name={pokemon.name}
-              type={pokemon.type}
-              description={pokemon.description}
-              hp={pokemon.hp}
-              image={pokemon.image}
-            />
-            <button
-              className="btnDelete"
-              onClick={() => removePokemon(pokemon.name)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                x="0px"
-                y="0px"
-                width="100"
-                height="100"
-                viewBox="0 0 50 50"
+      {isLoading ? (
+        <Spin></Spin>
+      ) : (
+        <div className="flex justify-center flex-wrap gap-5">
+          {pokemons.map((pokemon) => (
+            <div key={pokemon.name}>
+              <CardPokemon
+                name={pokemon.name}
+                type={pokemon.type}
+                description={pokemon.description}
+                hp={pokemon.hp}
+                image={pokemon.image}
+              />
+              <button
+                className="btnDelete"
+                onClick={() => removePokemon(pokemon.name)}
               >
-                <path d="M 21 2 C 19.354545 2 18 3.3545455 18 5 L 18 7 L 8 7 A 1.0001 1.0001 0 1 0 8 9 L 9 9 L 9 45 C 9 46.7 10.3 48 12 48 L 38 48 C 39.7 48 41 46.7 41 45 L 41 9 L 42 9 A 1.0001 1.0001 0 1 0 42 7 L 32 7 L 32 5 C 32 3.3545455 30.645455 2 29 2 L 21 2 z M 21 4 L 29 4 C 29.554545 4 30 4.4454545 30 5 L 30 7 L 20 7 L 20 5 C 20 4.4454545 20.445455 4 21 4 z M 19 14 C 19.6 14 20 14.4 20 15 L 20 40 C 20 40.6 19.6 41 19 41 C 18.4 41 18 40.6 18 40 L 18 15 C 18 14.4 18.4 14 19 14 z M 25 14 C 25.6 14 26 14.4 26 15 L 26 40 C 26 40.6 25.6 41 25 41 C 24.4 41 24 40.6 24 40 L 24 15 C 24 14.4 24.4 14 25 14 z M 31 14 C 31.6 14 32 14.4 32 15 L 32 40 C 32 40.6 31.6 41 31 41 C 30.4 41 30 40.6 30 40 L 30 15 C 30 14.4 30.4 14 31 14 z"></path>
-              </svg>
-            </button>
-          </div>
-        ))}
-      </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  x="0px"
+                  y="0px"
+                  width="100"
+                  height="100"
+                  viewBox="0 0 50 50"
+                >
+                  <path d="M 21 2 C 19.354545 2 18 3.3545455 18 5 L 18 7 L 8 7 A 1.0001 1.0001 0 1 0 8 9 L 9 9 L 9 45 C 9 46.7 10.3 48 12 48 L 38 48 C 39.7 48 41 46.7 41 45 L 41 9 L 42 9 A 1.0001 1.0001 0 1 0 42 7 L 32 7 L 32 5 C 32 3.3545455 30.645455 2 29 2 L 21 2 z M 21 4 L 29 4 C 29.554545 4 30 4.4454545 30 5 L 30 7 L 20 7 L 20 5 C 20 4.4454545 20.445455 4 21 4 z M 19 14 C 19.6 14 20 14.4 20 15 L 20 40 C 20 40.6 19.6 41 19 41 C 18.4 41 18 40.6 18 40 L 18 15 C 18 14.4 18.4 14 19 14 z M 25 14 C 25.6 14 26 14.4 26 15 L 26 40 C 26 40.6 25.6 41 25 41 C 24.4 41 24 40.6 24 40 L 24 15 C 24 14.4 24.4 14 25 14 z M 31 14 C 31.6 14 32 14.4 32 15 L 32 40 C 32 40.6 31.6 41 31 41 C 30.4 41 30 40.6 30 40 L 30 15 C 30 14.4 30.4 14 31 14 z"></path>
+                </svg>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
-      {/* Modal */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 p-5 flex justify-center items-center z-10  bg-opacity-50"
+          className="fixed inset-0 p-5 flex justify-center items-center z-10 bg-opacity-50"
           onClick={handleCancel}
         >
           <div
-            className="bg-gray-400 rounded-2xl shadow-lg w-96 space-y-3 z-1000 p-5  modal"
-            onClick={(e) => e.stopPropagation()} // impede fechamento ao clicar dentro
+            className="bg-gray-400 rounded-2xl shadow-lg w-96 space-y-3 z-1000 p-5 modal"
+            onClick={(e) => e.stopPropagation()}
           >
             <form
               onSubmit={(e) => {

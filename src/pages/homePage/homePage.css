@@ -1,7 +1,10 @@
+main {
+  background-image: "url('../../assets/img/fundo-site.png)";
+  background-repeat: repeat;
+}
 .btnAdd {
   padding: 10px;
 }
-
 .btnDelete {
   background-color: rgba(178, 178, 178, 0.827);
   cursor: pointer;

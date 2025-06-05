@@ -11,6 +11,7 @@ import "./homePage.css";
 export default function HomePage() {
   const [pokemons, setPokemons] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchingPokemon, setSearchingPokemon] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pokemonOptions, setPokemonOptions] = useState([]);
   const [selectedPokemonName, setSelectedPokemonName] = useState("");
@@ -24,7 +25,7 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchPokemonOptions() {
-      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10");
+      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=150");
       const data = await res.json();
 
       const addedNames = pokemons.map((p) => p.name);
@@ -43,8 +44,8 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchPokemons() {
       try {
-        setIsLoading(true);
-        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
+ 
+        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10");
         const data = await res.json();
 
         const detailedPromises = data.results.map(async (pokemon) => {
@@ -97,6 +98,7 @@ export default function HomePage() {
     setSelectedPokemonName(name);
 
     try {
+      setSearchingPokemon(true)
       const resDetails = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${name}`
       );
@@ -131,6 +133,9 @@ export default function HomePage() {
       });
     } catch (error) {
       alert("Erro ao buscar Pokémon selecionado:", error);
+    }
+    finally{
+      setSearchingPokemon(false)
     }
   }
 
@@ -175,7 +180,10 @@ export default function HomePage() {
       </div>
 
       {isLoading ? (
-        <Spin></Spin>
+        <div className="h-[100vh] justify-center items-center teste">
+          <Spin></Spin>
+        </div>
+        
       ) : (
         <div className="flex justify-center flex-wrap gap-5">
           {pokemons.map((pokemon) => (
@@ -286,6 +294,11 @@ export default function HomePage() {
                 </button>
               </div>
             </form>
+            {
+              searchingPokemon && (
+                <Spin></Spin>
+              )
+            }
           </div>
         </div>
       )}

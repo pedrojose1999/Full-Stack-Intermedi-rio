@@ -1,9 +1,15 @@
-import HomePage from "./pages/homePage/homePage";
+import Header from "./components/header/header";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./Routes.jsx";
+
 function App() {
   return (
-    <main>
-      <HomePage />
-    </main>
+    <BrowserRouter>
+      <Header />
+      <main>
+        <AppRoutes />
+      </main>
+    </BrowserRouter>
   );
 }
 

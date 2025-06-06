@@ -1,0 +1,98 @@
+.header {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  height: 12vh;
+  font-size: 1.3rem;
+  display: flex;
+  justify-items: center;
+  justify-content: space-evenly;
+}
+.header figure,
+.header figure img {
+  height: 100%;
+}
+figure {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 50%;
+  gap: 2rem;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  gap: 1.3rem;
+  justify-items: center;
+  justify-content: center;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  color: aqua;
+}
+.digitando {
+  display: flex;
+  color: aqua;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.15em solid;
+  width: 0;
+  animation: digitar 4s steps(30, end) infinite, esperar 5s step-end forwards 4s,
+    piscarCursor 0.75s step-end infinite;
+}
+
+@keyframes digitar {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes esperar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes piscarCursor {
+  0%,
+  100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
+}
+
+@media (max-width: 460px) {
+  .header {
+    flex-direction: column;
+    height: 25vh;
+  }
+  .header figure {
+    width: 100%;
+    justify-content: center;
+  }
+  .header figure,
+  .header figure img {
+    height: 70%;
+    align-items: center;
+  }
+}
